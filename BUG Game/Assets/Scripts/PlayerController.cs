@@ -13,7 +13,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float gravityValue = -9.81f;
     [SerializeField]
-    private float rotationSpeed = 5f;
+    private float horizontalRotationSpeed = 5f;
+    [SerializeField]
+    private float verticalRotationSpeed = 5f;
+    [SerializeField]
+    private Transform cameraArm;
 
     private CharacterController controller;
     private PlayerInput playerInput;
@@ -21,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private InputAction shootAction;
     private InputAction moveAction;
+    private InputAction lookAction;
 
     private Vector3 playerVelocity;
     private bool groundedPlayer;
@@ -34,6 +39,7 @@ public class PlayerController : MonoBehaviour
         // Set up actions
         moveAction = playerInput.actions["Move"];
         shootAction = playerInput.actions["Shoot"];
+        lookAction = playerInput.actions["Look"];
     }
 
     // Start is called before the first frame update
@@ -54,12 +60,22 @@ public class PlayerController : MonoBehaviour
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 move = new Vector3(input.x, 0, input.y);
         move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
+        move.y = 0;
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         playerVelocity.y += gravityValue * Time.deltaTime;
 
-        var targetAngle = cameraTransform.eulerAngles.y;
-        var targetRotation = Quaternion.Euler(0, targetAngle, 0);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        var lookDelta = lookAction.ReadValue<Vector2>();
+        var rotationX = lookDelta.x;
+        var rotationY = lookDelta.y;
+
+        transform.Rotate(new Vector3(0, rotationX * horizontalRotationSpeed * Time.deltaTime, 0));
+        var newRotation = new Vector3(-rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
+        print(newRotation);
+        cameraArm.Rotate(newRotation);
+
+        
+        //var newRotation = new Vector3(cameraArm.rotation.eulerAngles.y - rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
+        //cameraArm.rotation = Quaternion.Slerp(cameraArm.rotation, Quaternion.Euler(newRotation), verticalRotationSpeed * Time.deltaTime);
     }
 }
