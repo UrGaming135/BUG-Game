@@ -17,35 +17,70 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float verticalRotationSpeed = 5f;
     [SerializeField]
+    private float dashSpeed = 2;
+    [SerializeField]
+    private float dashTime = .5f;
+    [SerializeField]
+    private float dashCooldown = 5f;
+    [SerializeField]
     private Transform cameraArm;
 
     private CharacterController controller;
     private PlayerInput playerInput;
     private Transform cameraTransform;
+    private CameraManager cameraManager;
 
-    private InputAction shootAction;
+    private InputAction attackAction;
     private InputAction moveAction;
+    private InputAction dashAction;
     private InputAction lookAction;
+    private InputAction cameraRightAction;
+    private InputAction cameraLeftAction;
 
     private Vector3 playerVelocity;
     private bool groundedPlayer;
+    private Vector3 moveDirection;
+
+    private Weapon currentWeapon;
+    private bool dashing;
+    private float nextDash;
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         controller = GetComponent<CharacterController>();
         playerInput = GetComponent<PlayerInput>();
         cameraTransform = Camera.main.transform;
+        cameraManager = GetComponentInChildren<CameraManager>();
+        currentWeapon = (Weapon)GetComponentInChildren(typeof(Weapon));
 
         // Set up actions
         moveAction = playerInput.actions["Move"];
-        shootAction = playerInput.actions["Shoot"];
+        dashAction = playerInput.actions["Dash"];
+        attackAction = playerInput.actions["Attack"];
         lookAction = playerInput.actions["Look"];
+        cameraRightAction = playerInput.actions["CameraMoveRight"];
+        cameraLeftAction = playerInput.actions["CameraMoveLeft"];
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        
+        attackAction.started += _ => currentWeapon.StartAttacking();
+        attackAction.canceled += _ => currentWeapon.StopAttacking();
+        dashAction.performed += _ => Dash();
+        cameraRightAction.performed += _ => cameraManager.MoveCameraRight();
+        cameraLeftAction.performed += _ => cameraManager.MoveCameraLeft();
+    }
+
+    private void OnDisable()
+    {
+        attackAction.started -= _ => currentWeapon.StartAttacking();
+        attackAction.canceled -= _ => currentWeapon.StopAttacking();
+        dashAction.performed -= _ => Dash();
+        cameraRightAction.performed -= _ => cameraManager.MoveCameraRight();
+        cameraLeftAction.performed -= _ => cameraManager.MoveCameraLeft();
     }
 
     // Update is called once per frame
@@ -57,13 +92,18 @@ public class PlayerController : MonoBehaviour
             playerVelocity.y = 0;
         }
 
-        Vector2 input = moveAction.ReadValue<Vector2>();
-        Vector3 move = new Vector3(input.x, 0, input.y);
-        move = move.x * cameraTransform.right.normalized + move.z * cameraTransform.forward.normalized;
-        move.y = 0;
-        controller.Move(move * Time.deltaTime * playerSpeed);
+        if (!dashing)
+        {
+            Vector2 input = moveAction.ReadValue<Vector2>();
+            moveDirection = new Vector3(input.x, 0, input.y);
+            moveDirection = moveDirection.x * cameraTransform.right.normalized + moveDirection.z * cameraTransform.forward.normalized;
+            moveDirection.y = 0;
+            controller.Move(moveDirection * Time.deltaTime * playerSpeed);
 
-        playerVelocity.y += gravityValue * Time.deltaTime;
+            playerVelocity.y += gravityValue * Time.deltaTime;
+
+            //print(moveDirection);
+        }
 
         var lookDelta = lookAction.ReadValue<Vector2>();
         var rotationX = lookDelta.x;
@@ -71,11 +111,41 @@ public class PlayerController : MonoBehaviour
 
         transform.Rotate(new Vector3(0, rotationX * horizontalRotationSpeed * Time.deltaTime, 0));
         var newRotation = new Vector3(-rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
-        print(newRotation);
         cameraArm.Rotate(newRotation);
 
+        //if (shootAction.performed)
         
         //var newRotation = new Vector3(cameraArm.rotation.eulerAngles.y - rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
         //cameraArm.rotation = Quaternion.Slerp(cameraArm.rotation, Quaternion.Euler(newRotation), verticalRotationSpeed * Time.deltaTime);
+    }
+
+    void Dash()
+    {
+        if (Time.time >= nextDash)
+        {
+            nextDash = Time.time + dashCooldown;
+            StartCoroutine(DashCoroutine());
+        } else
+        {
+            print("Dash on cooldown");
+        }
+    }
+
+    IEnumerator DashCoroutine()
+    {
+        dashing = true;
+        print("Dash");
+        float startTime = Time.time;
+        while(Time.time < startTime + dashTime)
+        {
+            controller.Move(moveDirection * dashSpeed * Time.deltaTime);
+            yield return null;
+        }
+        dashing = false;
+    }
+
+    void WeaponSwap()
+    {
+
     }
 }

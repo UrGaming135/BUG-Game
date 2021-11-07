@@ -22,9 +22,33 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Shoot",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "6dccd4e5-3ef2-477d-8504-d8dfd428346c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CameraMoveLeft",
+                    "type": "Button",
+                    "id": "194c467c-0f27-40bd-8889-89f125c1695f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "CameraMoveRight",
+                    "type": "Button",
+                    "id": "bd629466-d08b-4d61-bd6d-7d961dfa1f86",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "21bacc74-5110-4c3b-8041-2595b59058ba",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -104,7 +128,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Shoot",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5468f023-c5c7-4ca4-a5d0-502e4c6af656",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1fafb1cf-29a9-4049-9b69-d813ec0c21cd",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57c6b8e0-5266-4db1-916d-94ebb33c4d50",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
