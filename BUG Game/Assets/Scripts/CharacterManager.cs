@@ -29,13 +29,17 @@ public class CharacterManager : MonoBehaviour
 
     void Die()
     {
+        if (gameObject == GameManager.instance.player)
+        {
+            GameManager.instance.SwapActiveCams();
+        }
         Destroy(gameObject);
     }
 
     public void Damage(float hitPoints)
     {
         currentHealth -= hitPoints;
-        print($"lost {hitPoints} health.");
+        //print($"lost {hitPoints} health.");
 
         showHealthBar = true;
 

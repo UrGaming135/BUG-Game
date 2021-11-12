@@ -112,11 +112,6 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(new Vector3(0, rotationX * horizontalRotationSpeed * Time.deltaTime, 0));
         var newRotation = new Vector3(-rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
         cameraArm.Rotate(newRotation);
-
-        //if (shootAction.performed)
-        
-        //var newRotation = new Vector3(cameraArm.rotation.eulerAngles.y - rotationY * verticalRotationSpeed * Time.deltaTime, 0, 0);
-        //cameraArm.rotation = Quaternion.Slerp(cameraArm.rotation, Quaternion.Euler(newRotation), verticalRotationSpeed * Time.deltaTime);
     }
 
     void Dash()
@@ -127,14 +122,14 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DashCoroutine());
         } else
         {
-            print("Dash on cooldown");
+            //print("Dash on cooldown");
         }
     }
 
     IEnumerator DashCoroutine()
     {
         dashing = true;
-        print("Dash");
+        //print("Dash");
         float startTime = Time.time;
         while(Time.time < startTime + dashTime)
         {
