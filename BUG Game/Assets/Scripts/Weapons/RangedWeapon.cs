@@ -19,6 +19,8 @@ public class RangedWeapon : MonoBehaviour, Weapon
     private Transform barrel;
     [SerializeField]
     private ParticleSystem sparks;
+    [SerializeField]
+    private LayerMask environment;
 
     private Transform cameraTransform;
     private Transform sparkParent;
@@ -72,7 +74,7 @@ public class RangedWeapon : MonoBehaviour, Weapon
                 if (characterManager)
                 {
                     characterManager.Damage(damage);
-                } else
+                } else if (1 << hit.collider.gameObject.layer == environment.value)
                 {
                     Destroy(Instantiate(sparks, hit.point + hit.normal * 0.005f, Quaternion.LookRotation(hit.normal), sparkParent), sparks.main.duration);
                 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public Camera primaryCamera;
     public Camera secondaryCamera;
+    public List<Transform> coverPointTransformList;
 
     private bool isPlayerAlive { get { return player; } }
 
@@ -22,6 +24,7 @@ public class GameManager : MonoBehaviour
 
         secondaryCamera.enabled = false;
         primaryCamera.enabled = true;
+        coverPointTransformList = GetCoverPointList();
     }
 
     private void Update()
@@ -31,6 +34,17 @@ public class GameManager : MonoBehaviour
             secondaryCamera.transform.position = primaryCamera.transform.position;
             secondaryCamera.transform.rotation = primaryCamera.transform.rotation;
         }
+    }
+
+    private List<Transform> GetCoverPointList()
+    {
+        var coverPoints = FindObjectsOfType<CoverPoint>();
+        var result = new List<Transform>();
+        foreach (var coverPoint in coverPoints)
+        {
+            result.Add(coverPoint.transform);
+        }
+        return result;
     }
 
     public void SwapActiveCams()

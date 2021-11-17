@@ -8,17 +8,19 @@ public class EnemyAI : MonoBehaviour
 {
     public EnemyState state = EnemyState.Chasing;
     public EnemyType enemyType = EnemyType.Melee;
+    public float attackRange = 5f;
 
-    [SerializeField]
-    private float attackRange = 5f;
     [SerializeField]
     private float attackSpeed = 2f;
     [SerializeField]
     private float damage = 10f;
+    [SerializeField]
+    private float stoppingDistance = 5f;
 
     private GameObject target;
     private CharacterManager targetManager;
     private NavMeshAgent agent;
+    private CoverPointNavigation coverNavigation;
 
     private Coroutine attackCoroutine;
 
@@ -26,10 +28,15 @@ public class EnemyAI : MonoBehaviour
 
     private void Awake()
     {
+        agent = GetComponent<NavMeshAgent>();
+        coverNavigation = GetComponent<CoverPointNavigation>();
+        nextAttack = Time.time;
+    }
+
+    private void Start()
+    {
         target = GameManager.instance.player;
         targetManager = target.GetComponent<CharacterManager>();
-        agent = GetComponent<NavMeshAgent>();
-        nextAttack = Time.time;
     }
 
     // Update is called once per frame
@@ -37,7 +44,19 @@ public class EnemyAI : MonoBehaviour
     {
         if (target)
         {
-            agent.SetDestination(target.transform.position);
+            // Get navigation target.
+            Transform navTarget;
+            if (coverNavigation.closestCoverPoint)
+            {
+                navTarget = coverNavigation.closestCoverPoint;
+                agent.stoppingDistance = 0;
+            } else
+            {
+                navTarget = target.transform;
+                agent.stoppingDistance = stoppingDistance;
+            }
+
+            agent.SetDestination(navTarget.position);
 
             var distanceToTarget = (target.transform.position - transform.position).magnitude;
             if (distanceToTarget <= attackRange)
