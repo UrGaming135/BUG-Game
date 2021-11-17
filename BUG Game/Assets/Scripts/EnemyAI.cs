@@ -21,6 +21,7 @@ public class EnemyAI : MonoBehaviour
     private CharacterManager targetManager;
     private NavMeshAgent agent;
     private CoverPointNavigation coverNavigation;
+    private EnemyAttack rangedAttack;
 
     private Coroutine attackCoroutine;
 
@@ -30,6 +31,7 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         coverNavigation = GetComponent<CoverPointNavigation>();
+        rangedAttack = GetComponent<EnemyAttack>();
         nextAttack = Time.time;
     }
 
@@ -102,10 +104,14 @@ public class EnemyAI : MonoBehaviour
 
     private void Attack()
     { 
-        print("This enemy doth attacketh y'unz");
+        //print("This enemy doth attacketh y'unz");
         if (enemyType == EnemyType.Melee)
         {
             MeleeAttack();
+        }
+        else
+        {
+            rangedAttack.ShootGun(target.transform);
         }
     }
 
@@ -113,6 +119,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (targetManager)
         {
+            print("Melee attack");
             targetManager.Damage(damage);
         }
     }

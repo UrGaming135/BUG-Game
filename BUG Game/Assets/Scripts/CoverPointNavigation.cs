@@ -7,6 +7,9 @@ public class CoverPointNavigation : MonoBehaviour
 {
     // Locate the closest, unoccupied cover point.
     public Transform closestCoverPoint;
+
+    [SerializeField]
+    private float buffer;
     private float range;
     private GameObject target;
     private List<Transform> coverPoints;

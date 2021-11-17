@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
             Vector2 input = moveAction.ReadValue<Vector2>();
             moveDirection = new Vector3(input.x, 0, input.y);
             moveDirection = moveDirection.x * cameraTransform.right.normalized + moveDirection.z * cameraTransform.forward.normalized;
-            moveDirection.y = 0;
+            moveDirection.y = playerVelocity.y;
             controller.Move(moveDirection * Time.deltaTime * playerSpeed);
 
             playerVelocity.y += gravityValue * Time.deltaTime;
