@@ -13,8 +13,8 @@ public class RangedWeapon : MonoBehaviour, Weapon
     private float damage = 10;
     //[SerializeField]
     //private float hitForce = 10;
-    //[SerializeField]
-    //private float range = 50;
+    [SerializeField]
+    private float range = 50;
     [SerializeField]
     private Transform barrel;
     [SerializeField]
@@ -67,7 +67,7 @@ public class RangedWeapon : MonoBehaviour, Weapon
         //var debugString = "Shot at ";
         Debug.DrawRay(cameraTransform.position, cameraTransform.forward);
 
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out var hit, Mathf.Infinity) && hit.collider != null)
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out var hit, range) && hit.collider != null)
         {
             var characterManager = hit.collider.gameObject.GetComponent<CharacterManager>();
             if (hit.collider.gameObject != this)
