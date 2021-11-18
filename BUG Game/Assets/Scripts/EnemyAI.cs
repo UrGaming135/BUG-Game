@@ -129,7 +129,7 @@ public class EnemyAI : MonoBehaviour
         if (targetManager)
         {
             print("Melee attack");
-            targetManager.Damage(damage);
+            //targetManager.Damage(damage);
         }
     }
 }

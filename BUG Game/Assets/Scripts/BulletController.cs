@@ -19,7 +19,7 @@ public class BulletController : MonoBehaviour
     public float timeToDestroy = 3f;
 
     private Transform decalParent;
-    private Transform sparkParent;
+    private Transform particleParent;
 
     public Vector3 target { get; set; }
     public bool hit { get; set; }
@@ -27,7 +27,7 @@ public class BulletController : MonoBehaviour
     private void OnEnable()
     {
         decalParent = GameObject.FindGameObjectWithTag("DecalParent")?.transform;
-        sparkParent = GameObject.FindGameObjectWithTag("SparkParent")?.transform;
+        particleParent = GameObject.Find("ParticleParent")?.transform;
         Destroy(gameObject, timeToDestroy);
     }
 
@@ -45,13 +45,12 @@ public class BulletController : MonoBehaviour
         {
             ContactPoint contact = collision.GetContact(0);
             var decal = GameObject.Instantiate(bulletDecal, contact.point + contact.normal * 0.005f, Quaternion.LookRotation(contact.normal), decalParent);
-            var sparkEffect = GameObject.Instantiate(sparks, contact.point + contact.normal * 0.005f, Quaternion.LookRotation(contact.normal), sparkParent);
+            var sparkEffect = GameObject.Instantiate(sparks, contact.point + contact.normal * 0.005f, Quaternion.LookRotation(contact.normal), particleParent);
             Destroy(sparkEffect, sparks.main.duration);
             Destroy(decal, timeToDestroyBulletDecal);
         }
         else
         {
-            Destroy(gameObject);
             var isPlayer = collisionObject.tag == "Player";
 
             if (isPlayer)
@@ -59,8 +58,9 @@ public class BulletController : MonoBehaviour
                 print("hit player");
                 var manager = collisionObject.GetComponentInParent<CharacterManager>();
                 var damageDone = damage;
-                manager.Damage(damageDone);
+                manager.Damage(damageDone, transform.position, -transform.forward);
             }
+            Destroy(gameObject);
         }
     }
 }

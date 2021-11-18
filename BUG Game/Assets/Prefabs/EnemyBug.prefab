@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 5629089557143490301}
   m_Layer: 8
   m_Name: EnemyBug
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,7 +145,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.83
-  m_Speed: 3.5
+  m_Speed: 7
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -171,6 +171,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 0
   maxHealth: 100
+  explosionParticles: {fileID: 0}
+  hitEffect: {fileID: 7191663861141748515, guid: 515ae0a3584fa3745b5382f15bb2194f, type: 3}
 --- !u!114 &671889767169733155
 MonoBehaviour:
   m_ObjectHideFlags: 0

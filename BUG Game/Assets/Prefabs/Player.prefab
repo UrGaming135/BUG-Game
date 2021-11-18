@@ -240,7 +240,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9dc8bcb920782a4888ad7e31a37b8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
   maxHealth: 5
+  explosionParticles: {fileID: 0}
+  hitEffect: {fileID: 7191663861141748515, guid: 515ae0a3584fa3745b5382f15bb2194f, type: 3}
 --- !u!1 &6127336240188634380
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,7 +750,8 @@ MonoBehaviour:
   rotationSpeed: 25
   fireRate: 10
   damage: 10
-  hitForce: 1
-  range: 0
   barrel: {fileID: 6127336240527807691}
   sparks: {fileID: 4882380960236834789, guid: 8b3ed516a460dff43abd71a0c9eb89bc, type: 3}
+  environment:
+    serializedVersion: 2
+    m_Bits: 0

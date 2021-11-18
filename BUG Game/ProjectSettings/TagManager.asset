@@ -8,6 +8,8 @@ TagManager:
   - BulletParent
   - DecalParent
   - SparkParent
+  - PlayerPane
+  - Enemy
   layers:
   - Default
   - TransparentFX

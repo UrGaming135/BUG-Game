@@ -11,10 +11,10 @@ public class RangedWeapon : MonoBehaviour, Weapon
     private float fireRate;
     [SerializeField]
     private float damage = 10;
-    [SerializeField]
-    private float hitForce = 10;
-    [SerializeField]
-    private float range = 50;
+    //[SerializeField]
+    //private float hitForce = 10;
+    //[SerializeField]
+    //private float range = 50;
     [SerializeField]
     private Transform barrel;
     [SerializeField]
@@ -22,15 +22,16 @@ public class RangedWeapon : MonoBehaviour, Weapon
     [SerializeField]
     private LayerMask environment;
 
+
     private Transform cameraTransform;
-    private Transform sparkParent;
+    private Transform particleParent;
 
     private Coroutine shootCoroutine;
 
     private void Awake()
     {
         cameraTransform = Camera.main.transform;
-        sparkParent = GameObject.Find("SparkParent").transform;
+        particleParent = GameObject.Find("ParticleParent").transform;
     }
 
     // Update is called once per frame
@@ -73,10 +74,11 @@ public class RangedWeapon : MonoBehaviour, Weapon
             {
                 if (characterManager)
                 {
-                    characterManager.Damage(damage);
+                    characterManager.Damage(damage, hit.point, hit.normal);
+                    
                 } else if (1 << hit.collider.gameObject.layer == environment.value)
                 {
-                    Destroy(Instantiate(sparks, hit.point + hit.normal * 0.005f, Quaternion.LookRotation(hit.normal), sparkParent), sparks.main.duration);
+                    Destroy(Instantiate(sparks, hit.point + hit.normal * 0.005f, Quaternion.LookRotation(hit.normal), particleParent), sparks.main.duration);
                 }
             }
         }

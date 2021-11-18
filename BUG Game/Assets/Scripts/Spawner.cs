@@ -11,7 +11,6 @@ public class Spawner : MonoBehaviour
 
     [Tooltip("Number of enemeies spawned at a time.")]
     public float enemeiesPerTick = 1;
-    public bool isSpawning = false;
 
     [SerializeField]
     private string[] pathsToPrefabs;
@@ -23,30 +22,32 @@ public class Spawner : MonoBehaviour
     private float timeBetweenSpawns = 2f;
     [SerializeField]
     private float enemiesToSpawn = 2f;
-
-    // TESTING FIELDS
     [SerializeField]
-    private int testEnemiesToSpawn = 10;
-    [SerializeField]
-    private int testEnemiesPerSpawn = 2;
-    [SerializeField]
-    private float testSecondsBetweenSpawn = 2;
+    private float startSpawnRadius = 50f;
 
     private Coroutine spawnCoroutine;
+    private GameObject player;
+    private bool isSpawning = false;
 
     private void Start()
     {
-        spawnCoroutine = StartCoroutine(Spawn());
+        player = GameManager.instance.player;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!hasPrintedGameOver && GameManager.instance.IsGameOver)
-        //{
-        //    hasPrintedGameOver = true;
-        //    //print("GAME OVER!!");
-        //}
+        if (player)
+        {
+            var playerDistance = Vector3.Distance(player.transform.position, transform.position);
+            if (playerDistance <= startSpawnRadius && !isSpawning)
+            {
+                StartSpawning();
+            } else if (playerDistance > startSpawnRadius && isSpawning)
+            {
+                StopSpawning();
+            }
+        }
     }
 
     private bool GetNavMeshPoint(out Vector3 point)
@@ -65,10 +66,28 @@ public class Spawner : MonoBehaviour
         return false;
     }
 
+    private void StartSpawning()
+    {
+        isSpawning = true;
+        spawnCoroutine = StartCoroutine(Spawn());
+    }
+
+    private void StopSpawning()
+    {
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
+        isSpawning = false;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, startSpawnRadius);
     }
 
     IEnumerator Spawn()
