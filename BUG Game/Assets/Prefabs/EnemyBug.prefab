@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 671889765457806311}
   - component: {fileID: 671889765457806310}
   - component: {fileID: 671889765457806309}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 671889767169733158}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &671889765457806311
 MeshFilter:
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 671889767169733159}
   - component: {fileID: 671889767169733337}
   - component: {fileID: 5629089557143490301}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyBug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,6 +129,7 @@ Transform:
   m_LocalPosition: {x: -3.838, y: 0, z: 7.652}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 2792377429513786236}
   - {fileID: 671889765457806308}
   - {fileID: 2673481258291101943}
   m_Father: {fileID: 0}
@@ -143,7 +144,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 671889767169733154}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.83
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -168,6 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9dc8bcb920782a4888ad7e31a37b8ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentHealth: 0
   maxHealth: 100
 --- !u!114 &671889767169733155
 MonoBehaviour:
@@ -182,11 +184,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  enemyType: 1
-  attackRange: 10
-  attackSpeed: 0.5
+  enemyType: 2
+  attackRange: 40
+  attackSpeed: 2
   damage: 10
-  stoppingDistance: 4
+  stoppingDistance: 18
+  eyeLineTransform: {fileID: 2792377429513786236}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!65 &671889767169733336
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -229,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   closestCoverPoint: {fileID: 0}
+  buffer: 0
 --- !u!114 &5629089557143490301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,8 +249,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrelTransform: {fileID: 6327610911569168771}
-  fireRate: 5
   bulletPrefab: {fileID: 1885319294305932389, guid: 644a234f939d6744d864c013fedbc6d7, type: 3}
+--- !u!1 &4536787358462275629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2792377429513786236}
+  m_Layer: 8
+  m_Name: Eyeline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2792377429513786236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4536787358462275629}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.447, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 671889767169733158}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7306417068723189828
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +289,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6327610911569168771}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,7 +322,7 @@ GameObject:
   - component: {fileID: 5598576183745679400}
   - component: {fileID: 308386217899474072}
   - component: {fileID: 5148640954273100733}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -378,7 +414,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2673481258291101943}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,5 +435,5 @@ Transform:
   - {fileID: 7179286154076010824}
   - {fileID: 6327610911569168771}
   m_Father: {fileID: 671889767169733158}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

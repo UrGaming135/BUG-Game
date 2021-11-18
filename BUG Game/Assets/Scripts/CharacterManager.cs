@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
+    public float currentHealth;
+    
     [SerializeField]
     private float maxHealth = 100;
 
-    private float currentHealth;
     private bool showHealthBar;
 
     private void Awake()

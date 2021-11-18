@@ -16,6 +16,10 @@ public class EnemyAI : MonoBehaviour
     private float damage = 10f;
     [SerializeField]
     private float stoppingDistance = 5f;
+    [SerializeField]
+    private Transform eyeLineTransform;
+    [SerializeField]
+    private LayerMask enemyLayer;
 
     private GameObject target;
     private CharacterManager targetManager;
@@ -61,7 +65,12 @@ public class EnemyAI : MonoBehaviour
             agent.SetDestination(navTarget.position);
 
             var distanceToTarget = (target.transform.position - transform.position).magnitude;
-            if (distanceToTarget <= attackRange)
+            var targetCenter = target.transform.position + new Vector3(0, 1f, 0);
+            var targetTop = target.transform.position + new Vector3(0, 1.9f, 0);
+            //Debug.DrawLine(eyeLineTransform.position, targetCenter, Color.red);
+            //Debug.DrawLine(eyeLineTransform.position, targetTop, Color.black);
+            var hasLineOfSight = !Physics.Linecast(eyeLineTransform.position, targetCenter, enemyLayer) || !Physics.Linecast(eyeLineTransform.position, targetTop, enemyLayer);
+            if (distanceToTarget <= attackRange && hasLineOfSight)
             {
                 state = EnemyState.Attacking;
                 attackCoroutine = StartCoroutine(AttackCoroutine());
@@ -103,7 +112,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     private void Attack()
-    { 
+    {
         //print("This enemy doth attacketh y'unz");
         if (enemyType == EnemyType.Melee)
         {
