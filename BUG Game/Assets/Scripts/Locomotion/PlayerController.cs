@@ -1,11 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController), typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
+    public RangedWeapon currentWeapon;
+
     [SerializeField]
     private float playerSpeed = 2.0f;
     [SerializeField]
@@ -41,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private bool groundedPlayer;
     private Vector3 moveDirection;
 
-    private Weapon currentWeapon;
+    private RangedWeapon[] rangedWeapons;
     private bool dashing;
     private float nextDash;
 
@@ -54,7 +55,9 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         cameraTransform = Camera.main.transform;
         cameraManager = GetComponentInChildren<CameraManager>();
-        currentWeapon = (Weapon)GetComponentInChildren(typeof(Weapon));
+
+        rangedWeapons = GetComponentsInChildren<RangedWeapon>();
+        currentWeapon = rangedWeapons[0];
 
         // Set up actions
         moveAction = playerInput.actions["Move"];
@@ -67,8 +70,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        attackAction.started += _ => currentWeapon.StartAttacking();
-        attackAction.canceled += _ => currentWeapon.StopAttacking();
+        if (currentWeapon != null)
+        {
+            attackAction.started += _ => currentWeapon.StartAttacking();
+            attackAction.canceled += _ => currentWeapon.StopAttacking();
+        }
         dashAction.performed += _ => Dash();
         cameraRightAction.performed += _ => cameraManager.MoveCameraRight();
         cameraLeftAction.performed += _ => cameraManager.MoveCameraLeft();
@@ -76,8 +82,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnDisable()
     {
-        attackAction.started -= _ => currentWeapon.StartAttacking();
-        attackAction.canceled -= _ => currentWeapon.StopAttacking();
+        if (currentWeapon != null)
+        {
+            attackAction.started -= _ => currentWeapon.StartAttacking();
+            attackAction.canceled -= _ => currentWeapon.StopAttacking();
+        }
         dashAction.performed -= _ => Dash();
         cameraRightAction.performed -= _ => cameraManager.MoveCameraRight();
         cameraLeftAction.performed -= _ => cameraManager.MoveCameraLeft();

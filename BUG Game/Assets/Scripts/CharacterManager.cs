@@ -1,37 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
     public float currentHealth;
-    
     [SerializeField]
-    private float maxHealth = 100;
+    public float maxHealth = 100;
+    
     [SerializeField]
     private GameObject explosionParticles;
     [SerializeField]
     private GameObject hitEffect;
+    [SerializeField]
+    private Color healthWarningColor = Color.red;
+    [SerializeField]
+    private Color healthStandardColor = Color.white;
 
     private Transform particleParent;
     private bool showHealthBar;
+    private TextMeshProUGUI healthValue;
 
     private void Awake()
     {
         currentHealth = maxHealth;
         particleParent = GameObject.Find("ParticleParent").transform;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        var healthValueObject = GameObject.Find("HeathValue");
+        healthValue = healthValueObject.GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        var currentHealthPercent = (int)(currentHealth / maxHealth * 100);
+        if (gameObject.CompareTag("Player") && healthValue)
+        {
+            if (currentHealthPercent <= 30)
+            {
+                healthValue.color = healthWarningColor;
+            }
+            else
+            {
+                healthValue.color = healthStandardColor;
+            }
+            healthValue.text = $"{currentHealth} / {maxHealth}";
+        }
     }
 
     void Die()
@@ -59,6 +73,11 @@ public class CharacterManager : MonoBehaviour
             Die();
         }
 
-        Destroy(Instantiate(hitEffect, contactPoint + normal * 0.005f, Quaternion.LookRotation(normal), particleParent), 2f);
+        Destroy(Instantiate(hitEffect, contactPoint + normal * 0.01f, Quaternion.LookRotation(normal), particleParent), 2f);
+    }
+
+    public void AddHealth(float amount)
+    {
+        currentHealth = currentHealth + amount > maxHealth ? maxHealth : currentHealth + amount;
     }
 }

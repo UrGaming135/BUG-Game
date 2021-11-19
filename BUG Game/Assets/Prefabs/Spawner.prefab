@@ -81,9 +81,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 100
+  maxHealth: 500
   explosionParticles: {fileID: 8729218973581988553, guid: 1f974bdb83644a94ca1bf970e8200a20, type: 3}
   hitEffect: {fileID: 7191663861141748515, guid: 8b3ed516a460dff43abd71a0c9eb89bc, type: 3}
+  healthWarningColor: {r: 1, g: 0, b: 0, a: 1}
+  healthStandardColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &6411651912705096961
 GameObject:
   m_ObjectHideFlags: 0
